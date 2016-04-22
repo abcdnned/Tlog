@@ -8,6 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Tlog {
+    private static final String SLICER = "-------------------------------";
+
+    private static final char BLANK_FILL = ' ';
+
     public static final Tlogconf config = new Tlogconf();
 
     public static int fastLog(final String msg) {
@@ -33,4 +37,39 @@ public class Tlog {
         }
         return Tlogcode.OK;
     }
+
+    public static void printSection(String string) {
+        // caculate number of blank-fill.
+        int l=string.length();
+
+        // do validate arguement.
+        if (l == 0) {
+            throw new IllegalArgumentException("string is empty.");
+        } else if (l > 16) {
+            throw new IllegalArgumentException("string length is greater than 16.");
+        }
+
+        int sl=SLICER.length();
+        int black=(sl-(l*2-1))/2;
+
+        System.out.println(SLICER);
+
+        char[] cs = new char[black + l * 2 - 1];
+        //fill a black string
+        for(int i=0;i<black;++i){
+            cs[i] = BLANK_FILL;
+        }
+        // add title
+        for (int i = 0; i < l; ++i) {
+            cs[2 * i + black] = string.charAt(i);
+            if (i != l - 1) {
+                cs[2 * i + black + 1] = BLANK_FILL;
+            }
+        }
+
+        System.out.println(new String(cs).toUpperCase());
+
+        System.out.println(SLICER);
+    }
+
 }
